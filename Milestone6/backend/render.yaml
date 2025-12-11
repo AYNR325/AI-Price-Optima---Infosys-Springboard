@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: ai-price-optima-backend
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn "app:create_app()"
+    envVars:
+      - key: SCIPY_OPTIMIZE_SLSQP_MAXITER
+        value: 15000 # Example env var if needed, mostly just placeholders
+    autoDeploy: false
