@@ -1,5 +1,13 @@
 # 🚗 AI-Powered Dynamic Pricing Optimization System
 
+## 🌐 Live Demo
+
+**🚀 [View Live Application](https://ai-price-optima-frontend.vercel.app)**
+
+Experience the interactive dashboard with real-time pricing predictions, data visualizations, and ML-powered insights.
+
+---
+
 ## 📋 Project Overview
 
 This project implements a comprehensive **Machine Learning-driven Dynamic Pricing System** that adjusts ride-sharing prices in real-time to maximize revenue while maintaining competitiveness. The system leverages historical sales data, demand-supply dynamics, and advanced ML techniques to predict optimal pricing strategies.
@@ -220,10 +228,15 @@ AI-price-optima/
 - ✅ **Data Visualization:** Integrated Recharts for Revenue Trends, Demand Heatmaps, and Feature Importance
 - ✅ **UI Overhaul:** Implemented a premium Dark Theme (Slate/Emerald)
 - ✅ **Responsive Design:** Ensured full mobile and tablet compatibility
+- ✅ **Deployment:** Frontend deployed on Vercel, Backend deployed on Render
 
 **Tech Stack Added:**
-- **Backend:** Flask, Flask-CORS, Joblib
+- **Backend:** Flask, Flask-CORS, Flask-Caching, Joblib
 - **Frontend:** React, Vite, Tailwind CSS, Recharts
+
+**Deployment:**
+- **Frontend:** [Live on Vercel](https://ai-price-optima-frontend.vercel.app)
+- **Backend:** Deployed on Render with health monitoring and caching optimizations
 
 **Key Components:**
 - `app.py`: Main API entry point
