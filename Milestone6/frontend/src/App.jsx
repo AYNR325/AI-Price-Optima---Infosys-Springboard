@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Dashboard from './components/Dashboard';
 import Simulator from './components/Simulator';
 import Visualizations from './components/Visualizations';
 import About from './components/About';
+import { startKeepAlive } from './utils/keepAlive';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Keep backend alive by pinging health endpoint every 10 minutes
+  useEffect(() => {
+    const cleanup = startKeepAlive();
+    return cleanup;
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 font-sans transition-colors duration-300 flex flex-col">
