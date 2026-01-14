@@ -1,20 +1,37 @@
+# from flask import Blueprint, jsonify, request, current_app
+# from models import pricing_model
+# import pandas as pd
+# import json
+# import os
+# from functools import wraps
+
+# api_bp = Blueprint('api', __name__)
+
+# DATA_PATH = "../../Data/raw/dynamic_pricing.csv"
+# if not os.path.exists(DATA_PATH):
+#     DATA_PATH = "e:/AI-PriceOptima/Data/raw/dynamic_pricing.csv"
+
+# # Cache for loaded data
+# _dataframe_cache = None
+# _cache_timestamp = None
+# CACHE_DURATION = 300  # 5 minutes
+
 from flask import Blueprint, jsonify, request, current_app
 from models import pricing_model
 import pandas as pd
 import json
 import os
-from functools import wraps
 
-api_bp = Blueprint('api', __name__)
+api_bp = Blueprint("api", __name__)
 
-DATA_PATH = "../../Data/raw/dynamic_pricing.csv"
-if not os.path.exists(DATA_PATH):
-    DATA_PATH = "e:/AI-PriceOptima/Data/raw/dynamic_pricing.csv"
+# Absolute path for CSV inside Docker
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.path.join(BASE_DIR, "dynamic_pricing.csv")
 
-# Cache for loaded data
 _dataframe_cache = None
 _cache_timestamp = None
-CACHE_DURATION = 300  # 5 minutes
+CACHE_DURATION = 300
+
 
 def get_cached_dataframe():
     """Load and cache dataframe to avoid repeated file reads"""
