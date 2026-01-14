@@ -6,7 +6,16 @@ from routes import api_bp
 def create_app():
     app = Flask(__name__)
     CORS(app)  # Enable CORS for all routes
-    
+    #------------------
+print("🔍 Starting app... loading blueprint...")
+
+    try:
+        from routes import api_bp
+        app.register_blueprint(api_bp, url_prefix="/api")
+        print("✅ Blueprint registered successfully!")
+    except Exception as e:
+        print("❌ Blueprint failed to register:", e)
+#--------------------
     # Configure caching
     cache_config = {
         'CACHE_TYPE': 'simple',  # In-memory cache (works for single instance)
