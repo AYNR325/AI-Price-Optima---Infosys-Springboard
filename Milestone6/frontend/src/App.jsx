@@ -3,17 +3,17 @@ import Dashboard from './components/Dashboard';
 import Simulator from './components/Simulator';
 import Visualizations from './components/Visualizations';
 import About from './components/About';
-import { startKeepAlive } from './utils/keepAlive';
+// import { startKeepAlive } from './utils/keepAlive';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Keep backend alive by pinging health endpoint every 10 minutes
-  useEffect(() => {
-    const cleanup = startKeepAlive();
-    return cleanup;
-  }, []);
+  // // Keep backend alive by pinging health endpoint every 10 minutes
+  // useEffect(() => {
+  //   const cleanup = startKeepAlive();
+  //   return cleanup;
+  // }, []);
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 font-sans transition-colors duration-300 flex flex-col">
@@ -27,7 +27,7 @@ function App() {
                 Dynamic Pricing
               </h1>
             </div>
-            
+
             {/* Desktop Menu */}
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
@@ -35,11 +35,10 @@ function App() {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 capitalize ${
-                      activeTab === tab
+                    className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 capitalize ${activeTab === tab
                         ? 'bg-emerald-600 text-white shadow-md shadow-emerald-500/20'
                         : 'text-slate-300 hover:bg-slate-700 hover:text-white'
-                    }`}
+                      }`}
                   >
                     {tab}
                   </button>
@@ -59,7 +58,7 @@ function App() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 ) : (
-                   <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                   </svg>
                 )}
@@ -79,11 +78,10 @@ function App() {
                     setActiveTab(tab);
                     setMobileMenuOpen(false);
                   }}
-                  className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium capitalize ${
-                    activeTab === tab
+                  className={`block w-full text-left px-3 py-2 rounded-md text-base font-medium capitalize ${activeTab === tab
                       ? 'bg-emerald-600 text-white'
                       : 'text-slate-300 hover:bg-slate-700 hover:text-white'
-                  }`}
+                    }`}
                 >
                   {tab}
                 </button>
@@ -105,7 +103,7 @@ function App() {
       <footer className="bg-slate-800 border-t border-slate-700 mt-auto">
         <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
           <p className="text-center text-slate-500 text-sm">
-            © 2025 AI-PriceOptima. Powered by XGBoost & LightGBM.
+            © 2025 AI-PriceOptima.
           </p>
         </div>
       </footer>
