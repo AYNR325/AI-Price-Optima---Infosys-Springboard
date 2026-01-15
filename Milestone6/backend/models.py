@@ -106,7 +106,7 @@ class PricingModel:
 
         premium_vehicle = df['Vehicle_Type'].map(self.vehicle_mapping)
         df['Premium_Factor'] = premium_vehicle * df['Average_Ratings']
-        df['Surge_Indicator'] = 0
+        df['Surge_Indicator'] = (df['Demand_Ratio'] > df['Demand_Ratio'].quantile(0.75)).astype(int)
 
         df['Location_Encoded'] = self.le_location.transform(df['Location_Category'])
         df['Time_Encoded'] = self.le_time.transform(df['Time_of_Booking'])
