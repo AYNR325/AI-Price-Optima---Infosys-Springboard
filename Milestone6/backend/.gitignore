@@ -6,3 +6,9 @@ env
 DEPLOYMENT_GUIDE_RENDER.md
 DEPLOYMENT_OPTIMIZATION.md
 KEEP_ALIVE_GUIDE.md
+
+# Debug & Verification Scripts
+calculate_threshold.py
+debug_*.py
+verify_*.py
+output.txt

@@ -102,11 +102,13 @@ class PricingModel:
         df['Market_Saturation'] = df['Number_of_Drivers'] / (df['Number_of_Riders'] + 1e-5)
         df['Rider_Loyalty_Score'] = df['Number_of_Past_Rides'] * 0.5 + df['Average_Ratings'] * 10
         df['Duration_Per_Rider'] = df['Expected_Ride_Duration'] / (df['Number_of_Riders'] + 1e-5)
-        df['Capacity_Utilization'] = df['Demand_Ratio'] / (df['Demand_Ratio'].max() + 1e-5)
-
+        df['Capacity_Utilization'] = df['Demand_Ratio'] / (17.6 + 1e-5) # Fixed max from training data
+        
         premium_vehicle = df['Vehicle_Type'].map(self.vehicle_mapping)
         df['Premium_Factor'] = premium_vehicle * df['Average_Ratings']
-        df['Surge_Indicator'] = (df['Demand_Ratio'] > df['Demand_Ratio'].quantile(0.75)).astype(int)
+        
+        # Fixed threshold from training data (3.8)
+        df['Surge_Indicator'] = (df['Demand_Ratio'] > 3.8).astype(int)
 
         df['Location_Encoded'] = self.le_location.transform(df['Location_Category'])
         df['Time_Encoded'] = self.le_time.transform(df['Time_of_Booking'])
@@ -114,8 +116,52 @@ class PricingModel:
         df['Vehicle_Encoded'] = df['Vehicle_Type'].map(self.vehicle_mapping)
 
         X = df[self.feature_cols]
-        prediction = self.model.predict(X)
-        return prediction.tolist()
+        base_prediction = self.model.predict(X)
+        
+        # Apply Logic Rules
+        final_prediction = []
+        for i, price in enumerate(base_prediction):
+            adjusted_price = self.apply_dynamic_pricing_rules(price, df.iloc[i])
+            final_prediction.append(adjusted_price)
+            
+        return final_prediction
+
+    def apply_dynamic_pricing_rules(self, base_price, row):
+        """
+        Manually adjust price based on strong market signals 
+        that might be diluted in the ML model.
+        """
+        adjusted_price = base_price
+        
+        # 1. Discount Rules (Low Demand / High Supply)
+        if row['Demand_Ratio'] < 0.3:
+            # Low demand -> 20% Discount
+            adjusted_price = adjusted_price * 0.80
+            
+        if row['Market_Saturation'] > 2.0:
+            # Too many drivers -> Additional 15% Discount
+            adjusted_price = adjusted_price * 0.85
+            
+        # 2. Surge Rules (High Demand)
+        # Relaxed threshold: Check if demand is just 20% higher than supply
+        if row['Demand_Ratio'] > 1.2:
+             # Progressive Surge
+            multiplier = 1.2
+            if row['Demand_Ratio'] > 2.0:
+                multiplier = 1.5 
+            if row['Surge_Indicator'] == 1:
+                multiplier += 0.1
+            adjusted_price = adjusted_price * multiplier
+            
+        # 3. Premium Vehicle Logic (Enforce Higher Price)
+        if row['Vehicle_Type'] == 'Premium':
+            adjusted_price = adjusted_price * 1.25
+
+        # 4. Hard Floor
+        final_price = max(50.0, adjusted_price)
+        
+        # 5. Global Normalizer (Model predictions are naturally high)
+        return final_price * 0.55
 
 
 pricing_model = PricingModel()
